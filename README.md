@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-## Getting Started
+## Images
 ![Screenshot_1691148967](https://github.com/JohnnyBoi03/Wall_App/assets/91638476/ccda3e9b-ef36-40a9-8a66-1e8a66de9b17)
 ![Screenshot_1691148974](https://github.com/JohnnyBoi03/Wall_App/assets/91638476/15cf9ead-3ffb-44bb-a510-b3b8c112aa0b)
 
