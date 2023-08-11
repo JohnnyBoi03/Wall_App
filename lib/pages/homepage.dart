@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-// current user
+  // current user
   final currentUser = FirebaseAuth.instance.currentUser!;
   //Sign user out
   void signOut() {
@@ -22,7 +22,16 @@ class _HomePageState extends State<HomePage> {
   // Text controller
   final textcontroller = TextEditingController();
   //Post message
-  void postMessage() {}
+  void postMessage() {
+    if (textcontroller.text.isNotEmpty) {
+      //store in firebase
+      FirebaseFirestore.instance.collection('User Post').add({
+        'UserEmail': currentUser.email,
+        'Message': textcontroller.text,
+        'TimeStamp': Timestamp.now()
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: signOut,
             icon: const Icon(Icons.logout),
-          )
+          ),
         ],
         backgroundColor: Colors.grey.shade900,
       ),
@@ -43,28 +52,35 @@ class _HomePageState extends State<HomePage> {
           children: [
             // the wall
             Expanded(
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('User Posts')
-                        .orderBy('TimeStamp', descending: false)
-                        .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData){
-                            return ListView.builder(itemBuilder: (context, index){ 
-                              // get the message
-                              final post=snapshot.data!.docs[index];
-                              return WallPost(message: post['message'], user: post['UserEmail'],);
-                            });
-                          } else if (snapshot.hasError){
-                            return Center(
-                              child: Text('Error:${snapshot.error}'),
-                            );
-                          }
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        )),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('User Posts')
+                    .orderBy('TimeStamp', descending: false)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final docs = snapshot.data!.docs;
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final post = docs[index];
+                        return WallPost(
+                          message: post['Message'],
+                          user: post['UserEmail'],
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+            ),
             // post message
             Padding(
               padding: const EdgeInsets.all(15),
@@ -73,18 +89,22 @@ class _HomePageState extends State<HomePage> {
                   //textfield
                   Expanded(
                     child: MyTextField(
-                        controller: textcontroller,
-                        hintText: 'write something on the wall...',
-                        obscureText: false),
+                      controller: textcontroller,
+                      hintText: 'write something on the wall...',
+                      obscureText: false,
+                    ),
                   ),
                   // post button
-                  IconButton(onPressed: () {}, icon: Icon(Icons.send))
+                  IconButton(onPressed: postMessage, icon: Icon(Icons.send)),
                 ],
               ),
             ),
 
             //grab user
-            Text('Logged in as: ' + currentUser.email!),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text('Logged in as: ' + currentUser.email!),
+            ),
           ],
         ),
       ),
