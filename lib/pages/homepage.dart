@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         title: const Text('The Wall'),
         actions: [
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.logout),
           ),
         ],
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.grey.shade800,
       ),
       body: Center(
         child: Column(
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('User Posts')
+                    .collection('User Post')
                     .orderBy('TimeStamp', descending: false)
                     .snapshots(),
                 builder: (context, snapshot) {
