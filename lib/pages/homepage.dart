@@ -31,6 +31,10 @@ class _HomePageState extends State<HomePage> {
         'TimeStamp': Timestamp.now()
       });
     }
+    // clear textfield after post
+    setState(() {
+      textcontroller.clear();
+    });
   }
 
   @override

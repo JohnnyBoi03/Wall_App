@@ -12,10 +12,10 @@ class WallPost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        bottom: 20,
-        left: 20,
-        right: 20,
-        top: 20,
+        bottom: 15,
+        left: 15,
+        right: 15,
+        top: 15,
       ),
       padding: const EdgeInsets.all(25),
       decoration: const BoxDecoration(
@@ -26,6 +26,15 @@ class WallPost extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // profile pic
+          Padding(
+            padding: const EdgeInsets.only(right: 8, top: 8,bottom: 8,),
+            child: Container(
+              decoration: BoxDecoration( shape: BoxShape.circle, color: Colors.grey.shade400),
+              padding: EdgeInsets.all(10),
+              child: Icon(Icons.person, color: Colors.white,),
+            ),
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
